@@ -1,0 +1,7 @@
+{
+  "protocol": "nsdeploy-agent-mcp/v1",
+  "network": "formlab",
+  "front_man": "formlab_assistant",
+  "available": false,
+  "reason": "Static hosting only; public MCP facade requires a host."
+}

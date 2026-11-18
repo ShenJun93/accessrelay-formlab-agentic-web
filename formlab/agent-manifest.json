@@ -1,0 +1,84 @@
+{
+    "brand":  "FormLab",
+    "networks":  [
+                     {
+                         "name":  "formlab",
+                         "front_man":  "formlab_assistant",
+                         "hocon":  "./formlab.network.json",
+                         "description":  "Inspect and improve a volunteer form with reversible, consent-gated browser-local actions.",
+                         "tags":  [
+                                      "agentified-website",
+                                      "accessibility"
+                                  ],
+                         "sample_queries":  [
+                                                "Which targeted findings are currently present?",
+                                                "Ask AccessRelay how to fix the email label.",
+                                                "Preview associate_label, ask for my approval, then apply."
+                                            ]
+                     }
+                 ],
+    "llm_router":  {
+                       "base_url":  "https://api.otari.ai/api/v1",
+                       "mock":  false,
+                       "byok_router":  "https://api.otari.ai/api/v1"
+                   },
+    "allowed_peers":  [
+                          "https://oaw-accessrelay-2026.vercel.app"
+                      ],
+    "peer_policy":  {
+                        "mode":  "closed",
+                        "deny_origins":  [
+
+                                         ],
+                        "note":  "Only known peer origins, with explicit visitor consent."
+                    },
+    "agent_mcp":  {
+                      "protocol":  "nsdeploy-agent-mcp/v1",
+                      "network":  "formlab",
+                      "front_man":  "formlab_assistant",
+                      "available":  false,
+                      "reason":  "Static hosting only; public MCP facade requires a host."
+                  },
+    "theme":  {
+                  "primary":  "#2153a3"
+              },
+    "linking":  {
+                    "protocol":  "nsdeploy-link/v1",
+                    "exports":  [
+                                    {
+                                        "network":  "formlab",
+                                        "front_man":  "formlab_assistant",
+                                        "aliases":  [
+                                                        "formlab",
+                                                        "formlab_assistant"
+                                                    ],
+                                        "url":  "formlab"
+                                    }
+                                ],
+                    "imports":  [
+
+                                ],
+                    "link_updates":  {
+                                         "mode":  "browser-local"
+                                     }
+                },
+    "deployment":  {
+                       "mode":  "static",
+                       "self_contained_runtime":  true,
+                       "browser_mock":  false,
+                       "direct_byok":  true,
+                       "direct_mcp_requires_cors":  true,
+                       "public_mcp_facade":  false
+                   },
+    "actions":  {
+                    "version":  1,
+                    "module":  "./site-actions.js",
+                    "bridge":  "./bridge/action-bridge.html",
+                    "agentTools":  [
+                                       "get_form_state",
+                                       "preview_accessibility_fix",
+                                       "apply_accessibility_fix",
+                                       "undo_accessibility_fix"
+                                   ]
+                }
+}

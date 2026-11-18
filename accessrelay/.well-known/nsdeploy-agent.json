@@ -1,0 +1,7 @@
+{
+  "protocol": "nsdeploy-agent-mcp/v1",
+  "network": "accessrelay",
+  "front_man": "access_coach",
+  "available": false,
+  "reason": "Static hosting only; public MCP facade requires a host."
+}

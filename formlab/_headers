@@ -1,0 +1,33 @@
+/agent-manifest.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/links.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/agent-mcp.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/.well-known/nsdeploy.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/.well-known/nsdeploy-agent.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/formlab.network.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/runtime/sandbox-worker.js
+  Content-Security-Policy: default-src 'none'; script-src blob:; connect-src 'none'; worker-src 'none'
+  X-Content-Type-Options: nosniff

@@ -1,0 +1,10 @@
+{
+  "networks": [
+    {
+      "name": "accessrelay"
+    }
+  ],
+  "actions": {
+    "version": 1
+  }
+}

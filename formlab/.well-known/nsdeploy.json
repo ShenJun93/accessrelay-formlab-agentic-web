@@ -1,0 +1,18 @@
+{
+  "protocol": "nsdeploy-link/v1",
+  "exports": [
+    {
+      "network": "formlab",
+      "front_man": "formlab_assistant",
+      "aliases": [
+        "formlab",
+        "formlab_assistant"
+      ],
+      "url": "formlab"
+    }
+  ],
+  "imports": [],
+  "link_updates": {
+    "mode": "browser-local"
+  }
+}
