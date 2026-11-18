@@ -3,6 +3,8 @@ import {boot} from "./runtime/index.js";
 import {setupPeerAssessmentUi} from "./peer-assessment-ui.js";
 import {setupPolicyReviewUi} from "./policy-review-ui.js";
 import {setupEvidenceReceiptUi} from "./evidence-receipt-ui.js";
+import {setupJudgeJourney} from "./judge-journey-ui.js";
+import {installRuntimeAccessibility} from "./shared/runtime-accessibility.mjs";
 setupEvidenceReceiptUi();
 const status=document.getElementById("agent-status");
 const base=new URL("./",import.meta.url).href;
@@ -11,10 +13,12 @@ try{
     originUrl:base,
     sandboxWorkerUrl:new URL("runtime/sandbox-worker.js",base).href
   });
+  installRuntimeAccessibility(document.getElementById("agent-app"));
   window.__accessrelayP0={loaded:true,network:"formlab",remote:"https://oaw-accessrelay-2026.vercel.app/accessrelay"};
   status.textContent=result.engine?.byokKey?"Browser runtime ready with visitor-provided key.":"Browser runtime ready · provide your own key for real agent/LLM calls.";
   setupPeerAssessmentUi(result.engine);
   setupPolicyReviewUi(result.engine);
+  setupJudgeJourney();
   // Browser-only proof of consent + cross-origin JSON discovery, NOT a live LLM call.
   const peerButton=document.getElementById("peer-inspect");
   const peerStatus=document.getElementById("peer-inspect-status");

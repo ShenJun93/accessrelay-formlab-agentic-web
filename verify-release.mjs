@@ -1,4 +1,4 @@
-// P777 public-source integrity verifier. Dependencies: Node.js >=22 only.
+// P785 candidate public-source integrity verifier. Dependencies: Node.js >=22 only.
 // Does not contact networks or authenticate publishers; a hash is not a signature.
 import {readFile,lstat,readdir} from "node:fs/promises";
 import {createHash} from "node:crypto";
@@ -12,7 +12,7 @@ async function walk(dir,found=[]){
  for(const ent of await readdir(dir,{withFileTypes:true})){
   const full=path.join(dir,ent.name),rel=path.relative(ROOT,full).replaceAll("\\","/");
   if(ent.isSymbolicLink())assert(false,"symlink "+rel);
-  if(ent.isDirectory()){if(dir===ROOT&&ent.name===".git")continue;await walk(full,found);}
+  if(ent.name===".git"&&ent.isDirectory())continue; if(ent.isDirectory())await walk(full,found);
   else if(ent.isFile())found.push(rel);
   else assert(false,"non-regular asset "+rel);
  }
@@ -20,9 +20,11 @@ async function walk(dir,found=[]){
 }
 export async function verifySnapshot(){
  const m=JSON.parse(await readFile(path.join(ROOT,"RELEASE_MANIFEST.json"),"utf8"));
- assert(m.schema==="accessrelay-clean-source-snapshot/v1","invalid schema");
- assert(m.published===true&&m.publicationApproval===true&&m.publicationUrl==="https://github.com/ShenJun93/accessrelay-formlab-agentic-web","public release identity mismatch");
- assert(m.provenance?.p775DeployedAssetSha256==="1bb5fd48067e77a25110df3834839d83fec12df252ecd69514ed274eb546f459","unrecognized source pin");
+ assert(m.schema==="accessrelay-p790-public-source/v1","invalid schema");
+ assert(m.published===true&&m.publicationApproval===true,"public source manifest metadata mismatch");
+ assert(m.origins?.formlab==="https://oaw-formlab-2026.vercel.app"&&m.origins?.accessrelay==="https://oaw-accessrelay-2026.vercel.app","origin binding mismatch");
+ assert(m.policySha256==="60ba135536c3b93954b891e531c5db9e9b9bc1ee216630c99d5bc24750f364d0","policy hash mismatch");
+ assert(m.provenance?.p784CandidateArtifactSha256==="fc7b7bcefa83b910fc2d7caa30ea467655cb0c6839104ae4562de18a7475cbfa","unrecognized source pin");
  assert(Array.isArray(m.files)&&m.fileCount===m.files.length&&m.fileCount>120,"manifest count");
  const names=new Set(),entries=[];
  for(const x of m.files){
@@ -44,13 +46,13 @@ export async function verifySnapshot(){
   "source inventory digest changed");
  const site=entries.filter(x=>/^(?:formlab|accessrelay)\//.test(x.path)&&
   !x.path.includes("/tests/"));
- assert(site.length===107,"published website file count drift");
- assert(hash(Buffer.from(site.map(x=>x.path+"\0"+x.sha256).join("\n"),"utf8"))===m.provenance.p775DeployedAssetSha256,
-  "the two public sites differ from P775");
- return {status:"SELF_ATTESTED_SOURCE_BYTES_PASS",files:m.fileCount,
+ assert(site.length===116,"published website file count drift");
+ assert(hash(Buffer.from(site.map(x=>x.path+"\0"+x.sha256).join("\n"),"utf8"))===m.provenance.p784CandidateArtifactSha256,
+  "the two public sites differ from the reviewed P784 candidate");
+ return {status:"P790_PUBLIC_SOURCE_BYTES_PASS",files:m.fileCount,
   publicSiteFiles:site.length,inventorySha256:m.inventorySha256,
-  productionArtifactSha256:m.provenance.p775DeployedAssetSha256,
-  noImportedInternalHistory:!names.has(".git")};
+  candidateArtifactSha256:m.provenance.p784CandidateArtifactSha256,
+  noGitHistory:!names.has(".git")};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  try{console.log(JSON.stringify(await verifySnapshot(),null,2))}

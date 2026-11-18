@@ -1,5 +1,19 @@
 import {FIXES, createInitialState, getIssues, snapshot, previewFix, applyFix, undoLast} from "./form-core.mjs";
 import {checkVerifiedPeerBinding} from "./verified-peer-binding.mjs";
+import {runReviewedTransition} from "./shared/review-boundary.mjs";
+
+// First-party adapter: bounded state/DOM facts, never input values or HTML.
+function readFormReviewEvidence(){
+ const state=formController.state;
+ return {version:state.version,facts:{
+  appliedFixes:state.applied.join("|"),
+  historyCount:state.history.length,
+  selectedFix:formController.selectedFix??"none",
+  labelLinked:document.getElementById("email-label")?.getAttribute("for")==="email",
+  errorsAnnounced:document.getElementById("form-error")?.getAttribute("role")==="alert",
+  contrastImproved:document.documentElement.dataset.contrast==="improved"
+ }};
+}
 
 export const formController = {
   state: createInitialState(), selectedFix: null, lastReceipt: null,
@@ -113,21 +127,33 @@ if(typeof document !== "undefined"){
       dialog.addEventListener("close",()=>resolve(dialog.returnValue==="approve"),{once:true});
     });
   }
+  function reviewOutcome(result,success){
+    if(result.ok){document.getElementById("preview").textContent=success;return;}
+    if(result.reason==="approval_declined")return;
+    document.getElementById("preview").textContent=result.didMutate
+      ?"Action may have executed, but local evidence was not verified. Inspect the form before trying again."
+      :"NO CHANGE — approval boundary refused: "+result.reason;
+  }
   document.getElementById("apply").addEventListener("click", async () => {
     const id=formController.selectedFix;
-    const p=formController.preview(id);
-    if(!p.ok){document.getElementById("preview").textContent=p.reason;return;}
-    const agreed=await requestReview("Apply this reversible browser-local change? "+p.diff);
-    if(!agreed)return;
-    const result=formController.apply(id,p.expectedVersion,{approvedBy:"browser-dialog"});
-    document.getElementById("preview").textContent=result.ok?"Applied. Use Undo to revert.":result.reason;
+    const preview=formController.preview(id);
+    if(!preview.ok){document.getElementById("preview").textContent=preview.reason;return;}
+    const result=await runReviewedTransition({
+      origin:location.origin,operation:"formlab-apply",readEvidence:readFormReviewEvidence,
+      requestApproval:()=>requestReview("Apply this reversible browser-local change? "+preview.diff),
+      mutate:()=>formController.apply(id,preview.expectedVersion,{approvedBy:"browser-dialog"})
+    });
+    reviewOutcome(result,"Applied. Use Undo to revert.");
   });
   document.getElementById("undo").addEventListener("click", async () => {
-    if(!formController.state.history.length) return;
-    const agreed=await requestReview("Undo the most recent browser-local accessibility fix?");
-    if(!agreed)return;
-    const result=formController.undo(formController.state.version,{approvedBy:"browser-dialog"});
-    document.getElementById("preview").textContent=result.ok?"Undone; the prior finding is restored.":result.reason;
+    if(!formController.state.history.length)return;
+    const version=formController.state.version;
+    const result=await runReviewedTransition({
+      origin:location.origin,operation:"formlab-undo",readEvidence:readFormReviewEvidence,
+      requestApproval:()=>requestReview("Undo the most recent browser-local accessibility fix?"),
+      mutate:()=>formController.undo(version,{approvedBy:"browser-dialog"})
+    });
+    reviewOutcome(result,"Undone; the prior finding is restored.");
   });
   document.getElementById("signup").addEventListener("submit",e=>{
     e.preventDefault();

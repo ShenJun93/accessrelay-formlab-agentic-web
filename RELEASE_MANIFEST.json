@@ -1,25 +1,26 @@
 {
-  "schema": "accessrelay-clean-source-snapshot/v1",
+  "schema": "accessrelay-p790-public-source/v1",
   "published": true,
   "publicationApproval": true,
   "provenance": {
-    "p776Commit": "57ad94eb6721106bda1962a14498d0e78100d3b3",
-    "p775DeployedAssetSha256": "1bb5fd48067e77a25110df3834839d83fec12df252ecd69514ed274eb546f459",
-    "cognizantUpstreamCommit": "7817c1f75b8d4f497c869540212be17dda94dcae"
+    "p784AuditCommit": "f165d294989534df0bcf98a702e30ee5fbd1f153",
+    "p784CandidateArtifactSha256": "fc7b7bcefa83b910fc2d7caa30ea467655cb0c6839104ae4562de18a7475cbfa",
+    "cognizantUpstreamCommit": "7817c1f75b8d4f497c869540212be17dda94dcae",
+    "p789InternalReviewedCommit": "74c9da52020f98290d0f6d96427206d857c544eb"
   },
   "origins": {
     "formlab": "https://oaw-formlab-2026.vercel.app",
     "accessrelay": "https://oaw-accessrelay-2026.vercel.app"
   },
   "policySha256": "60ba135536c3b93954b891e531c5db9e9b9bc1ee216630c99d5bc24750f364d0",
-  "fileCount": 125,
-  "totalBytes": 3995843,
-  "inventorySha256": "5269eae421635d44f2b1049b2d280dcf9cdbefdd095f29fe84b809ea7c455e71",
+  "fileCount": 134,
+  "totalBytes": 4024131,
+  "inventorySha256": "f795c3b19341dec34dd742e104bb133e1d82eb81712a90ab485b5530bcbb709c",
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 338,
-      "sha256": "f34a660be9f895a6645716ef144a6b8e9494014de0a5f6f938ee471701e9156d"
+      "bytes": 314,
+      "sha256": "092bace7d2dc7d8c638723a3f929a7d2407a0ff0ff883dd36c56ecb0bc5ed7f1"
     },
     {
       "path": ".gitignore",
@@ -77,14 +78,24 @@
       "sha256": "3a0dd0a96230e961fe601233ebab1d6b2770337d594774f020280306e70ed256"
     },
     {
+      "path": "accessrelay/favicon.svg",
+      "bytes": 387,
+      "sha256": "5e08898fe56390c606bfc0abae5c8aae5ee583a8ae964a194583a6f8f5a4bfc6"
+    },
+    {
       "path": "accessrelay/index.html",
-      "bytes": 2380,
-      "sha256": "88b0b630b26892df8b16cfa89c174004969eef7c4503a3e63eddbf456fe6b361"
+      "bytes": 3470,
+      "sha256": "02134c7db3f9848f0f7c93dcd1fa911ae919d428c5f6fe29a98227f2d361e691"
     },
     {
       "path": "accessrelay/links.json",
       "bytes": 62,
       "sha256": "f8dab117d337277d30b6e27101fb5ae62efe046bdfc40663a6b7cda3fbbf080e"
+    },
+    {
+      "path": "accessrelay/peer-hero.css",
+      "bytes": 2528,
+      "sha256": "f8864a614ec75d73e5d0bf360aa9425ec990e0e09b2c12f82ff4fc01a9f8047c"
     },
     {
       "path": "accessrelay/runtime/action-bridge.js",
@@ -252,14 +263,19 @@
       "sha256": "7af171a63243d1dc9257f40c234c4a67760898505f37ffcae18474cec3d64361"
     },
     {
+      "path": "accessrelay/shared/runtime-accessibility.mjs",
+      "bytes": 2380,
+      "sha256": "20f6fe1bbdcef46761f6571857d3dcc80766da2a9cdaa6587f0aaed4c9e4a0a7"
+    },
+    {
       "path": "accessrelay/site-actions.js",
       "bytes": 729,
       "sha256": "2db2d55840e2245006f2b9c2244b3c43973a9b07b13157f961369d792a515161"
     },
     {
       "path": "accessrelay/site.js",
-      "bytes": 717,
-      "sha256": "d75890a397e747179bf20de8015ef67ce505328209e56c86dfd16485fc746d15"
+      "bytes": 866,
+      "sha256": "2fe47e5efba09386105cf171233f365e0ef82e60fa00d5546b082b0646d77d48"
     },
     {
       "path": "accessrelay/styles.css",
@@ -297,6 +313,11 @@
       "sha256": "288033d41cc07bba14d1911a713a50b9bb4d49f89504fafbeccd440b0b491c9f"
     },
     {
+      "path": "formlab/agent-evidence-gate.mjs",
+      "bytes": 1489,
+      "sha256": "e11e3035acdb4f28f195ebe766b1b767af7a4806e744054f2d8703dbd7452926"
+    },
+    {
       "path": "formlab/agent-manifest.json",
       "bytes": 3760,
       "sha256": "c8251e2d16d685e18bdc9a50112ce80b5b79dbca25705fcda55894e23cd496b3"
@@ -327,9 +348,14 @@
       "sha256": "f9df58c5ebf9bab83e570e498ab93694446d8337bb83824bcd6977d6fb6aa664"
     },
     {
+      "path": "formlab/favicon.svg",
+      "bytes": 345,
+      "sha256": "add6b95262078a49d7bcd9bfd8ef6236501f69c54ccb7d86100a439a763ecc25"
+    },
+    {
       "path": "formlab/form-controller.js",
-      "bytes": 7507,
-      "sha256": "39ea375d5cb2c796fc93d44753c1895383f9e9be5414ee4d2c451afffb0a3ee5"
+      "bytes": 8776,
+      "sha256": "998467acebc295e4ced883a058c09ee0f4d00e2bd9feeb26fc8a2fa0f8392691"
     },
     {
       "path": "formlab/form-core.mjs",
@@ -348,8 +374,18 @@
     },
     {
       "path": "formlab/index.html",
-      "bytes": 7528,
-      "sha256": "0672206a81de96cef3bcbf4a8af88e566df71f7fc3749d3b8df0a2694ce9cad8"
+      "bytes": 8788,
+      "sha256": "b6eab194b6fc68833198a25fad315492035138e9817610a1962ca4f95da387b5"
+    },
+    {
+      "path": "formlab/judge-hero.css",
+      "bytes": 5029,
+      "sha256": "24987098ba6effd6c8009de6df4075e5ed4bffbf6f20dea80f9543fa1a7c8d22"
+    },
+    {
+      "path": "formlab/judge-journey-ui.js",
+      "bytes": 3550,
+      "sha256": "908aee47edc8cbbe74d49a2e4ea8747beedee3ac801897fba2407df83fb6c09e"
     },
     {
       "path": "formlab/links.json",
@@ -358,8 +394,8 @@
     },
     {
       "path": "formlab/peer-assessment-ui.js",
-      "bytes": 6068,
-      "sha256": "b79c2a32cef20c7e62a58e8e7e45245a44db4fae9f8b4c7bd7e11cdb1a2a1a92"
+      "bytes": 6528,
+      "sha256": "8dd32bd0f6986426ef256ed8cda15ffa19d3e51e54b03c35b9801b3163d18b03"
     },
     {
       "path": "formlab/peer-assessment.mjs",
@@ -368,8 +404,8 @@
     },
     {
       "path": "formlab/peer-runtime-adapter.mjs",
-      "bytes": 5288,
-      "sha256": "86d51b6736fe6f3be710a2bc2ab0c9e96a58772a39c9fd149116cfb5b0a8e54b"
+      "bytes": 6530,
+      "sha256": "eb6f6c8a4ba475be39fa5a435f9f71723a38bc58eabe865f1cd1d46008afd39f"
     },
     {
       "path": "formlab/policy-review-ui.js",
@@ -547,14 +583,24 @@
       "sha256": "7af171a63243d1dc9257f40c234c4a67760898505f37ffcae18474cec3d64361"
     },
     {
+      "path": "formlab/shared/review-boundary.mjs",
+      "bytes": 5876,
+      "sha256": "71914f0fa7577bc76a6754a00f70d5bce0ffadb9a296c0d69bb6274ca9814c0f"
+    },
+    {
+      "path": "formlab/shared/runtime-accessibility.mjs",
+      "bytes": 2380,
+      "sha256": "20f6fe1bbdcef46761f6571857d3dcc80766da2a9cdaa6587f0aaed4c9e4a0a7"
+    },
+    {
       "path": "formlab/site-actions.js",
       "bytes": 1896,
       "sha256": "39e0e83306c513fb248e5b781c6b95b01072f08ea5a9cb58efef2c0648ef4066"
     },
     {
       "path": "formlab/site.js",
-      "bytes": 3772,
-      "sha256": "14e83a075c18964c39a85d6d7cfb50045489d7de7fc428b85bcf9acadd53cdca"
+      "bytes": 4001,
+      "sha256": "68ddfd566c61935b420ad96cfe6ca2f677c3cfe6c963b788eea20d792e973290"
     },
     {
       "path": "formlab/styles.css",
@@ -608,8 +654,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4518,
-      "sha256": "a138332d4f64a3b44f6a0134e5eb1232e131e7375a85b3d45218e85cfa16f3e3"
+      "bytes": 2930,
+      "sha256": "07539d0d198c5ac02cbed394e1e8279e4c24f2354fcdffae524ce7a681c49b3b"
     },
     {
       "path": "shared/portable-integrity.mjs",
@@ -638,10 +684,10 @@
     },
     {
       "path": "verify-release.mjs",
-      "bytes": 3456,
-      "sha256": "91c62ba727081c63e9ad85a599c8a8b6bd98849d966ba7b4eda9a3ddd5a37535"
+      "bytes": 3693,
+      "sha256": "e2c11c567549ab996b02b94e7f6c7954dbeace75d29e569a580dff53d14ba473"
     }
   ],
-  "publicationUrl": "https://github.com/ShenJun93/accessrelay-formlab-agentic-web",
-  "publicationScope": "clean-source-only-no-internal-history"
+  "release": "P790",
+  "selfAttestedNotSigned": true
 }

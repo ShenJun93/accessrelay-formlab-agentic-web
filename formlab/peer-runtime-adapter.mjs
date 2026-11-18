@@ -1,6 +1,7 @@
 // P765: first-party integration with the official Cognizant Engine.
 // No vendored runtime edits. Untrusted peer text may only become an allowlisted preview.
 import {manifestAllowsPeer} from "./runtime/engine.js";
+import {assessLocalAgentEvidence} from "./agent-evidence-gate.mjs";
 import {
   ASSESSMENT_RULES, makeAssessmentRequest, createSingleUseAssessmentGate
 } from "./peer-assessment.mjs";
@@ -27,9 +28,10 @@ function parseExactReply(result) {
 }
 
 export async function requestVerifiedPeerAssessment({
-  engine, localOrigin, peerUrl, fixId, requestId, readCurrentState,
+  engine, localOrigin, peerUrl, fixId, requestId, readCurrentState, readEvidence,
 }) {
   if (typeof readCurrentState !== "function") return fail("local_state_unavailable");
+  if (typeof readEvidence !== "function") return fail("first_party_dom_evidence_unavailable");
   if (!engine?.top?.manifest || typeof engine.resolveRemote !== "function")
     return fail("runtime_unavailable");
   // Engine's absent-UI default allows headless consent: explicitly reject it here.
@@ -39,7 +41,7 @@ export async function requestVerifiedPeerAssessment({
   if (typeof engine.byokKey !== "string" || !engine.byokKey.trim())
     return fail("inference_provider_not_configured");
 
-  let url, trustedSiteOrigin, request;
+  let url, trustedSiteOrigin, request, localSignal;
   try {
     url = new URL(peerUrl);
     trustedSiteOrigin = new URL(localOrigin).origin;
@@ -51,6 +53,12 @@ export async function requestVerifiedPeerAssessment({
       state: readCurrentState(), fixId, requestId,
       siteOrigin: trustedSiteOrigin, peerOrigin:url.origin
     });
+    let liveObservation;
+    try{liveObservation=readEvidence();}
+    catch{return fail("first_party_dom_evidence_unavailable");}
+    const evidence=assessLocalAgentEvidence({issueId:fixId,evidence:liveObservation});
+    if(!evidence.ok)return fail(evidence.reason);
+    localSignal=evidence.signal;
   } catch { return fail("invalid_assessment_request"); }
 
   // The request text is *only* a fixed public signal. No form field values, DOM or secrets.
@@ -83,6 +91,9 @@ export async function requestVerifiedPeerAssessment({
     "Return only one compact JSON object, no Markdown or code fences.",
     "Use precisely these fields: protocol, requestId, siteOrigin, peerOrigin, issueId, ruleId, expectedVersion, decision, reasonCode.",
     "Repeat binding fields exactly from the following public request.",
+    "The calling website independently observed the following limited DOM condition: "+localSignal+".",
+    "This is a caller-reported signal, NOT direct peer DOM access; never claim independent WCAG measurements.",
+    "Recommend only if the reported condition supports the target fix; otherwise abstain.",
     "If you cannot assess the targeted issue, reply decision=abstain and reasonCode=insufficient_evidence.",
     "To recommend, use decision=recommend and reasonCode="+rule.reasonCode+".",
     "Never include form values, credentials, HTML, scripts, links, notes, or extra fields.",
@@ -98,12 +109,19 @@ export async function requestVerifiedPeerAssessment({
   } catch { return fail("peer_inference_failed"); }
   const parsed=parseExactReply(response);
   if (!parsed.ok) return parsed;
+  // Re-measure the same first-party signal after the model returns. A DOM edit
+  // without a state-version change must not authorize a stale recommendation.
+  let latest;
+  try{latest=assessLocalAgentEvidence({issueId:fixId,evidence:readEvidence()});}
+  catch{return fail("first_party_dom_evidence_changed");}
+  if(!latest.ok||latest.signal!==localSignal)return fail("first_party_dom_evidence_changed");
   // Re-read the canonical form state AFTER the async peer result to defeat stale responses.
   const gate=createSingleUseAssessmentGate({request,observedPeerOrigin:observedOrigin});
   const verdict=gate.assess(parsed.payload,readCurrentState());
   if (!verdict.ok) return verdict;
   return {
     ok:true, trustedPeerOrigin:observedOrigin,
+    callerObservedSignal:localSignal,
     requestId:request.requestId, assessedVersion:verdict.expectedVersion,
     issueId:verdict.issueId, ruleId:verdict.ruleId,
     recommendedChange:verdict.recommendedChange,

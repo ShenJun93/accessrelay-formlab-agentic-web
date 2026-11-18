@@ -85,10 +85,14 @@ export function setupPeerAssessmentUi(engine) {
       const verdict=await requestVerifiedPeerAssessment({
         engine,localOrigin:location.origin,peerUrl:"https://oaw-accessrelay-2026.vercel.app/accessrelay",
         fixId:requestedIssue,requestId:crypto.randomUUID(),
-        readCurrentState:()=>formController.state
+        readCurrentState:()=>formController.state,
+        readEvidence:()=>readTargetedEvidence({documentImpl:document,
+          styleImpl:node=>getComputedStyle(node)})
       });
       if(!verdict.ok){
-        status.textContent="NO CHANGE — peer assessment blocked: "+verdict.reason+".";
+        status.textContent=verdict.reason==="inference_provider_not_configured"
+          ? "NO CHANGE — real agent needs your own provider. Open ⚙ Developer below, choose a supported model and router, then Save and start. No model call was made."
+          : "NO CHANGE — peer assessment blocked: "+verdict.reason+".";
         return;
       }
       if(selector.value!==requestedIssue){
@@ -112,6 +116,7 @@ export function setupPeerAssessmentUi(engine) {
       formController.render();
       document.getElementById("preview").textContent=[
         "Validated external assessment from "+verdict.trustedPeerOrigin,
+        "Caller-observed DOM signal: "+verdict.callerObservedSignal+" (no form values were shared)",
         verdict.recommendedChange,
         "Before: "+preview.beforeRemaining+" findings; After: "+preview.afterRemaining+" findings.",
         "Bound to version "+verdict.assessedVersion+" and one issue. No page changes yet.",

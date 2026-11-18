@@ -1,5 +1,5 @@
 * -text
-# Preserve exact bytes of vendor source, including generated bundles and Apache license formatting.
+# Preserve exact source bytes across Windows/macOS/Linux checkout settings.
 accessrelay/runtime/generated/agent-runner.bundle.js -whitespace
 formlab/runtime/generated/agent-runner.bundle.js -whitespace
 LICENSE -whitespace
