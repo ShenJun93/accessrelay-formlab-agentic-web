@@ -13,8 +13,8 @@
   },
   "policySha256": "60ba135536c3b93954b891e531c5db9e9b9bc1ee216630c99d5bc24750f364d0",
   "fileCount": 125,
-  "totalBytes": 3995841,
-  "inventorySha256": "9fdace947f3d7bf732d4a5f7fa5ac2269d6d40c9bb7c6a2b6144580d44b37ec8",
+  "totalBytes": 3995843,
+  "inventorySha256": "5269eae421635d44f2b1049b2d280dcf9cdbefdd095f29fe84b809ea7c455e71",
   "files": [
     {
       "path": ".gitattributes",
@@ -608,8 +608,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4516,
-      "sha256": "a74e4ec7437b452a270e3c3d1e363b219f05a2fc1f67d7b85125785ae0fe3094"
+      "bytes": 4518,
+      "sha256": "a138332d4f64a3b44f6a0134e5eb1232e131e7375a85b3d45218e85cfa16f3e3"
     },
     {
       "path": "shared/portable-integrity.mjs",

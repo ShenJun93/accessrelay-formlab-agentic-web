@@ -1,4 +1,4 @@
-# AccessRelay + FormLab — public-source candidate
+# AccessRelay + FormLab - Reversible Agentic Websites
 
 Two independent browser-native agentic websites. Their 107 public static assets are byte-for-byte aligned with the reviewed P775 production release. This stand-alone repository has a fresh public Git history, with no imported internal Bounty Hub commits, secrets, logs or QA worktrees.
 
